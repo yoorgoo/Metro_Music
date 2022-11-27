@@ -1,10 +1,14 @@
 #ifndef MUSIC_PLAYER_H
 #define MUSIC_PLAYER_H
 
+#include "qlistwidget.h"
 #include <QMainWindow>
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QDebug>
+#include <QListWidgetItem>
+#include <QDir>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class music_player; }
@@ -69,6 +73,12 @@ private slots:
     void on_durationChanged(int position);
 
     void on_start_clicked();
+
+    /*!
+     * \brief on_songList_itemDoubleClicked starts playing song if double clicked
+     * \param item this represents the song in a directory
+     */
+    void on_songList_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     Ui::music_player *ui;

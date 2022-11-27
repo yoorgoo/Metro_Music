@@ -28,6 +28,15 @@ music_player::music_player(QWidget *parent)
 
 
 
+    //====Lets populate the songlist with the songs====//
+
+    QDir song_directory("C:/Users/buck_/Desktop/mymusic");
+
+    foreach(QFileInfo var, song_directory.entryInfoList()){
+        ui->songList->addItem(var.fileName());
+    }
+
+
 }
 /*!
  * \brief music_player::~music_player
@@ -90,9 +99,6 @@ void music_player::on_durationChanged(int position)
     QString song_mins_str = QString::number(song_mins);
     QString song_duration = song_mins_str + ":" + song_sec_str;
     ui->songLength->setText(song_duration);
-
-
-
 }
 
 
@@ -110,7 +116,7 @@ void music_player::on_start_clicked()
 
     QString song_namestr = song_name.fileName();
 
-    ui->listWidget->addItem(song_namestr);
+    ui->songList->addItem(song_namestr);
 }
 
 void music_player::displaySongLength(int position){
@@ -121,14 +127,14 @@ void music_player::displaySongLength(int position){
     int song_remainder = song_progress % 60000;
     int secs_progress = song_remainder / 1000;
 
-    if(secs_progress <= 9){
+    if(secs_progress <= 9){ //run when <10 so we get :04 or :05 and so on
         QString secs_progress_str = "0" + QString::number(secs_progress);
         int mins_progress = song_progress / 60000;
         QString mins_progress_str = QString::number(mins_progress);
         QString running_song_progress = mins_progress_str + ":" + secs_progress_str;
         ui->label_4->setText(running_song_progress);
     }
-    else{
+    else{ //:run when >9 so we get :11, :12 and so on
         QString secs_progress_str = QString::number(secs_progress);
         int mins_progress = song_progress / 60000;
         QString mins_progress_str = QString::number(mins_progress);
@@ -139,4 +145,16 @@ void music_player::displaySongLength(int position){
 }
 
 
+void music_player::on_songList_itemDoubleClicked(QListWidgetItem *item)
+{
+    player->setAudioOutput(audioOutput);
+
+    QString song_namestr = item->text();
+    QString song_path = "C:/Users/buck_/Desktop/mymusic/" + song_namestr;
+    qDebug() <<song_path;
+    player->setSource(QUrl::fromLocalFile(song_path));
+    player->play();
+
+
+}
 
