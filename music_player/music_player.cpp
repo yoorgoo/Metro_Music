@@ -105,6 +105,12 @@ void music_player::on_start_clicked()
     player->setSource(QUrl::fromLocalFile("/C:/Users/buck_/Downloads/Southstar - miss you.mp3"));
     player->play();
     qDebug()<<player->errorString();
+
+    QUrl song_name = player->source();
+
+    QString song_namestr = song_name.fileName();
+
+    ui->listWidget->addItem(song_namestr);
 }
 
 void music_player::displaySongLength(int position){
