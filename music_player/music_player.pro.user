@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 8.0.1, 2022-11-21T16:51:50. -->
+<!-- Written by QtCreator 8.0.1, 2022-11-27T18:35:18. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -228,8 +228,9 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/buck_/Desktop/qt_music/music_player/music_player.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/buck_/Desktop/qt_music/music_player/music_player.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">music_player2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/buck_/Desktop/music_player/Metro_Music/music_player/music_player.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/buck_/Desktop/music_player/Metro_Music/music_player/music_player.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>

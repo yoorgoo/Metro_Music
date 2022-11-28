@@ -33,10 +33,14 @@ music_player::music_player(QWidget *parent)
     QDir song_directory("C:/Users/buck_/Desktop/mymusic");
 
     foreach(QFileInfo var, song_directory.entryInfoList()){
-        ui->songList->addItem(var.fileName());
+        //we need to differntiate between .mp3 files and all others
+        if(var.suffix() == "mp3"){ //get the suffix of the file
+            ui->songList->addItem(var.fileName());
+        }
+
     }
 
-
+    //===============================================//
 }
 /*!
  * \brief music_player::~music_player
@@ -106,6 +110,7 @@ void music_player::on_durationChanged(int position)
 void music_player::on_start_clicked()
 {
     //Load and play the song
+    /*
     player->setAudioOutput(audioOutput);
 
     player->setSource(QUrl::fromLocalFile("/C:/Users/buck_/Downloads/Southstar - miss you.mp3"));
@@ -117,6 +122,7 @@ void music_player::on_start_clicked()
     QString song_namestr = song_name.fileName();
 
     ui->songList->addItem(song_namestr);
+    */
 }
 
 void music_player::displaySongLength(int position){
