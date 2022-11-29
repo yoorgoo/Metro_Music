@@ -30,6 +30,7 @@ music_player::music_player(QWidget *parent)
 
     //====Lets populate the songlist with the songs====//
 
+    /*
     QDir song_directory("C:/Users/buck_/Desktop/mymusic");
 
     foreach(QFileInfo var, song_directory.entryInfoList()){
@@ -38,7 +39,7 @@ music_player::music_player(QWidget *parent)
             ui->songList->addItem(var.fileName());
         }
 
-    }
+    } */
 
     //===============================================//
 }
@@ -98,31 +99,44 @@ void music_player::on_durationChanged(int position)
     int song_remainder = myduration % 60000;
 
     int song_secs = song_remainder/1000;
-    QString song_sec_str = QString::number(song_secs);
-    int song_mins = myduration / 60000;
-    QString song_mins_str = QString::number(song_mins);
-    QString song_duration = song_mins_str + ":" + song_sec_str;
-    ui->songLength->setText(song_duration);
+    //QString song_sec_str = QString::number(song_secs);
+    if(song_secs <= 9){
+        QString song_sec_str = "0" + QString::number(song_secs);
+        int song_mins = myduration / 60000;
+        QString song_mins_str = QString::number(song_mins);
+        QString song_duration = song_mins_str + ":" + song_sec_str;
+        ui->songLength->setText(song_duration);
+    }
+    else{
+        QString song_sec_str = QString::number(song_secs);
+        int song_mins = myduration / 60000;
+        QString song_mins_str = QString::number(song_mins);
+        QString song_duration = song_mins_str + ":" + song_sec_str;
+        ui->songLength->setText(song_duration);
+    }
+
+
+
+
 }
 
 
 
 void music_player::on_start_clicked()
 {
-    //Load and play the song
-    /*
-    player->setAudioOutput(audioOutput);
+    //open a folder directory
 
-    player->setSource(QUrl::fromLocalFile("/C:/Users/buck_/Downloads/Southstar - miss you.mp3"));
-    player->play();
-    qDebug()<<player->errorString();
+    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
 
-    QUrl song_name = player->source();
+    QDir song_directory = dirFolder;
+    //QDir song_directory("C:/Users/buck_/Desktop/mymusic");
 
-    QString song_namestr = song_name.fileName();
-
-    ui->songList->addItem(song_namestr);
-    */
+    foreach(QFileInfo var, song_directory.entryInfoList()){
+        //we need to differntiate between .mp3 files and all others
+        if(var.suffix() == "mp3"){ //get the suffix of the file
+            ui->songList->addItem(var.fileName());
+        }
+    }
 }
 
 void music_player::displaySongLength(int position){

@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QListWidgetItem>
 #include <QDir>
+#include <QFileDialog>
 
 
 QT_BEGIN_NAMESPACE
