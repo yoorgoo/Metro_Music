@@ -9,6 +9,9 @@
 #include <QListWidgetItem>
 #include <QDir>
 #include <QFileDialog>
+#include <QtCore>
+#include <QtGui>
+
 
 
 QT_BEGIN_NAMESPACE
@@ -86,5 +89,10 @@ private:
 
     QMediaPlayer* player;
     QAudioOutput* audioOutput;
+
+    QStringListModel *songsmodel;
+
+
+
 };
 #endif // MUSIC_PLAYER_H

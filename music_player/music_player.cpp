@@ -21,6 +21,10 @@ music_player::music_player(QWidget *parent)
     audioOutput = new QAudioOutput(this);
     player->setAudioOutput(audioOutput);
 
+    songsmodel = new QStringListModel(this);
+
+
+
     //SIGNALS and SLOTS, the QMediaPlayer signals go to the music_player(our ui) slot
     connect(player, &QMediaPlayer::positionChanged, this, &music_player::on_positionChanged); //change the progress slider
     connect(player, &QMediaPlayer::durationChanged, this, &music_player::on_durationChanged); //a new song is basically loaded here
@@ -30,15 +34,47 @@ music_player::music_player(QWidget *parent)
 
     //====Lets populate the songlist with the songs====//
 
+    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
+    QDir song_directory = dirFolder;
+
+    QStringList songListView;
+
+    foreach(QFileInfo var, song_directory.entryInfoList()){
+        //we need to differntiate between .mp3 files and all others
+        if(var.suffix() == "mp3"){ //get the suffix of the file
+            ui->songList->addItem(var.fileName());
+            //songListView.append(var.fileName());
+            songListView << var.fileName();
+        }
+
+     }
+
+    songsmodel->setStringList(songListView);
+    ui->listView->setModel(songsmodel);
+
+    ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+
+
+
+
+
+
+    //============================================================//
+
     /*
-    QDir song_directory("C:/Users/buck_/Desktop/mymusic");
+    //open a folder directory
+
+    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
+
+    QDir song_directory = dirFolder;
+    //QDir song_directory("C:/Users/buck_/Desktop/mymusic");
 
     foreach(QFileInfo var, song_directory.entryInfoList()){
         //we need to differntiate between .mp3 files and all others
         if(var.suffix() == "mp3"){ //get the suffix of the file
             ui->songList->addItem(var.fileName());
         }
-
     } */
 
     //===============================================//

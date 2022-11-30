@@ -1,7 +1,5 @@
 #include "music_player.h"
-
 #include <QApplication>
-
 #include <QFile>
 
 
