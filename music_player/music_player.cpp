@@ -34,50 +34,9 @@ music_player::music_player(QWidget *parent)
 
     //====Lets populate the songlist with the songs====//
 
-    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
-    QDir song_directory = dirFolder;
-
-    QStringList songListView;
-
-    foreach(QFileInfo var, song_directory.entryInfoList()){
-        //we need to differntiate between .mp3 files and all others
-        if(var.suffix() == "mp3"){ //get the suffix of the file
-            ui->songList->addItem(var.fileName());
-            //songListView.append(var.fileName());
-            songListView << var.fileName();
-        }
-
-     }
-
-    songsmodel->setStringList(songListView);
-    ui->listView->setModel(songsmodel);
-
-    ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
 
-
-
-
-
-    //============================================================//
-
-    /*
-    //open a folder directory
-
-    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
-
-    QDir song_directory = dirFolder;
-    //QDir song_directory("C:/Users/buck_/Desktop/mymusic");
-
-    foreach(QFileInfo var, song_directory.entryInfoList()){
-        //we need to differntiate between .mp3 files and all others
-        if(var.suffix() == "mp3"){ //get the suffix of the file
-            ui->songList->addItem(var.fileName());
-        }
-    } */
-
-    //===============================================//
 }
 /*!
  * \brief music_player::~music_player
@@ -162,17 +121,26 @@ void music_player::on_start_clicked()
 {
     //open a folder directory
 
-    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
 
+    QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
     QDir song_directory = dirFolder;
-    //QDir song_directory("C:/Users/buck_/Desktop/mymusic");
+
+    QStringList songListView;
 
     foreach(QFileInfo var, song_directory.entryInfoList()){
         //we need to differntiate between .mp3 files and all others
         if(var.suffix() == "mp3"){ //get the suffix of the file
             ui->songList->addItem(var.fileName());
+            //songListView.append(var.fileName());
+            songListView << var.fileName();
         }
-    }
+
+     }
+
+    songsmodel->setStringList(songListView);
+    ui->listView->setModel(songsmodel);
+
+    ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void music_player::displaySongLength(int position){
@@ -212,5 +180,18 @@ void music_player::on_songList_itemDoubleClicked(QListWidgetItem *item)
     player->play();
 
 
+}
+
+
+void music_player::on_listView_doubleClicked(const QModelIndex &index)
+{
+    player->setAudioOutput(audioOutput);
+
+    QStringList song_nameslist = songsmodel->stringList();
+    QString song_namestr = songsmodel->stringList().at(index.row());
+    QString song_path = "C:/Users/buck_/Desktop/mymusic/" + song_namestr;
+    qDebug() <<song_path;
+    player->setSource(QUrl::fromLocalFile(song_path));
+    player->play();
 }
 

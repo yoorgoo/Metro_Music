@@ -84,6 +84,8 @@ private slots:
      */
     void on_songList_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_listView_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::music_player *ui;
 
