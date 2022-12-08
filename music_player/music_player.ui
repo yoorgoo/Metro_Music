@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1560</width>
-    <height>454</height>
+    <width>1048</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="font">
@@ -157,24 +157,40 @@
      <string>START</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="songList">
+   <widget class="QListView" name="songList">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>20</y>
-      <width>351</width>
-      <height>351</height>
+      <x>540</x>
+      <y>10</y>
+      <width>441</width>
+      <height>381</height>
      </rect>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>30</y>
-      <width>441</width>
-      <height>341</height>
+      <x>100</x>
+      <y>370</y>
+      <width>88</width>
+      <height>30</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>&lt;&lt;Back</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="nextSong">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>370</y>
+      <width>88</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Next &gt;&gt;</string>
     </property>
    </widget>
   </widget>
@@ -183,10 +199,16 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1560</width>
+     <width>1048</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuhello">
+    <property name="title">
+     <string>hello</string>
+    </property>
+   </widget>
+   <addaction name="menuhello"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

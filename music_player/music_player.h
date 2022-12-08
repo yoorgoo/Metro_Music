@@ -1,7 +1,6 @@
 #ifndef MUSIC_PLAYER_H
 #define MUSIC_PLAYER_H
 
-#include "qlistwidget.h"
 #include <QMainWindow>
 #include <QMediaPlayer>
 #include <QAudioOutput>
@@ -76,15 +75,18 @@ private slots:
      */
     void on_durationChanged(int position);
 
+    /*!
+     * \brief on_start_clicked open up and selects folder you want to add for you playlist
+     */
     void on_start_clicked();
 
-    /*!
-     * \brief on_songList_itemDoubleClicked starts playing song if double clicked
-     * \param item this represents the song in a directory
-     */
-    void on_songList_itemDoubleClicked(QListWidgetItem *item);
 
-    void on_listView_doubleClicked(const QModelIndex &index);
+    /*!
+     * \brief on_nextSong_clicked go to the next song
+     */
+    void on_nextSong_clicked();
+
+    void on_songList_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::music_player *ui;
@@ -93,6 +95,7 @@ private:
     QAudioOutput* audioOutput;
 
     QStringListModel *songsmodel;
+    QDir* songDirectory;
 
 
 

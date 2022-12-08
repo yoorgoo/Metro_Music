@@ -22,6 +22,7 @@ music_player::music_player(QWidget *parent)
     player->setAudioOutput(audioOutput);
 
     songsmodel = new QStringListModel(this);
+    songDirectory = new QDir;
 
 
 
@@ -109,13 +110,7 @@ void music_player::on_durationChanged(int position)
         QString song_duration = song_mins_str + ":" + song_sec_str;
         ui->songLength->setText(song_duration);
     }
-
-
-
-
 }
-
-
 
 void music_player::on_start_clicked()
 {
@@ -124,23 +119,23 @@ void music_player::on_start_clicked()
 
     QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
     QDir song_directory = dirFolder;
+    *songDirectory = song_directory;
 
-    QStringList songListView;
+    QStringList songListView; //this gets pushed to the model
 
     foreach(QFileInfo var, song_directory.entryInfoList()){
         //we need to differntiate between .mp3 files and all others
         if(var.suffix() == "mp3"){ //get the suffix of the file
-            ui->songList->addItem(var.fileName());
-            //songListView.append(var.fileName());
-            songListView << var.fileName();
+            songListView.append(var.fileName());
+            //songListView << var.fileName();
         }
 
      }
-
+    //====This is were the model data is set====//
     songsmodel->setStringList(songListView);
-    ui->listView->setModel(songsmodel);
+    ui->songList->setModel(songsmodel);
 
-    ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->songList->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void music_player::displaySongLength(int position){
@@ -169,13 +164,38 @@ void music_player::displaySongLength(int position){
 }
 
 
-void music_player::on_songList_itemDoubleClicked(QListWidgetItem *item)
+void music_player::on_nextSong_clicked()
 {
-    player->setAudioOutput(audioOutput);
+    //We need to get the index of the current song playing. note this is not the index that we are currently highlighting
+    //the player class should have the name of the song currently playing
+    //we can find the index of the current song playing, get the index+1, find the song at index + 1 and play.
+    //player->stop();
 
-    QString song_namestr = item->text();
-    QString song_path = "C:/Users/buck_/Desktop/mymusic/" + song_namestr;
-    qDebug() <<song_path;
+    int num_songs = songsmodel->stringList().size();
+    //int song_index = player->activeAudioTrack(); //why am I using the player class? we need to get it from the song mondel
+    QUrl curr_song = player->source(); //this includes the file path
+    qDebug() << "filename" << curr_song.fileName(); //this is just the filename
+
+    QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
+    qDebug() << "curr_song_str = " << curr_song_str;
+
+    QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
+    qDebug() << "songDirectory_str = " << songDirectory_str;
+
+    int song_index = songsmodel->stringList().indexOf(curr_song_str);
+    qDebug() << song_index;
+    int next_song_index = song_index + 1;
+
+    if(next_song_index > (num_songs-1)){
+        next_song_index = 0;
+    }
+
+    QString next_song_str = songsmodel->stringList().at(next_song_index);
+    qDebug() << next_song_str;
+
+    QString song_path = songDirectory_str +"/" +  next_song_str;
+    //QString song_path = songsmodel->stringList().value(next_song_index);
+
     player->setSource(QUrl::fromLocalFile(song_path));
     player->play();
 
@@ -183,14 +203,14 @@ void music_player::on_songList_itemDoubleClicked(QListWidgetItem *item)
 }
 
 
-void music_player::on_listView_doubleClicked(const QModelIndex &index)
+void music_player::on_songList_doubleClicked(const QModelIndex &index)
 {
     player->setAudioOutput(audioOutput);
 
     QStringList song_nameslist = songsmodel->stringList();
     QString song_namestr = songsmodel->stringList().at(index.row());
     QString song_path = "C:/Users/buck_/Desktop/mymusic/" + song_namestr;
-    qDebug() <<song_path;
+    //qDebug() <<song_path;
     player->setSource(QUrl::fromLocalFile(song_path));
     player->play();
 }
