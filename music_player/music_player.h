@@ -88,6 +88,8 @@ private slots:
 
     void on_songList_doubleClicked(const QModelIndex &index);
 
+    void on_prevSong_clicked();
+
 private:
     Ui::music_player *ui;
 

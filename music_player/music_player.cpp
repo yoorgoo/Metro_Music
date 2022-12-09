@@ -215,3 +215,28 @@ void music_player::on_songList_doubleClicked(const QModelIndex &index)
     player->play();
 }
 
+
+void music_player::on_prevSong_clicked()
+{
+    int num_songs = songsmodel->stringList().size();
+    QUrl curr_song = player->source(); //this includes the file path
+    QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
+    QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
+
+    int song_index = songsmodel->stringList().indexOf(curr_song_str);
+    qDebug() << song_index;
+    int prev_song_index = song_index -1;
+
+    if(prev_song_index < 0){
+        prev_song_index = 0; //do we want to go to end??? or just stay at 0?
+    }
+
+    QString prev_song_str = songsmodel->stringList().at(prev_song_index);
+
+    QString song_path = songDirectory_str + "/" +  prev_song_str;
+    //QString song_path = songsmodel->stringList().value(next_song_index);
+
+    player->setSource(QUrl::fromLocalFile(song_path));
+    player->play();
+}
+

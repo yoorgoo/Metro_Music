@@ -22,8 +22,8 @@
    <widget class="QPushButton" name="play">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>90</y>
+      <x>90</x>
+      <y>170</y>
       <width>101</width>
       <height>51</height>
      </rect>
@@ -36,7 +36,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>90</y>
+      <y>170</y>
       <width>111</width>
       <height>51</height>
      </rect>
@@ -48,8 +48,8 @@
    <widget class="QSlider" name="progressSlider">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>290</y>
+      <x>130</x>
+      <y>400</y>
       <width>251</width>
       <height>16</height>
      </rect>
@@ -61,8 +61,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>230</y>
+      <x>130</x>
+      <y>340</y>
       <width>129</width>
       <height>59</height>
      </rect>
@@ -79,8 +79,8 @@
    <widget class="QLabel" name="songLength">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>290</y>
+      <x>390</x>
+      <y>400</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -92,8 +92,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>290</y>
+      <x>70</x>
+      <y>400</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -110,8 +110,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>90</y>
+      <x>540</x>
+      <y>360</y>
       <width>131</width>
       <height>61</height>
      </rect>
@@ -162,16 +162,16 @@
      <rect>
       <x>540</x>
       <y>10</y>
-      <width>441</width>
-      <height>381</height>
+      <width>451</width>
+      <height>341</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="prevSong">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>370</y>
+      <x>90</x>
+      <y>230</y>
       <width>88</width>
       <height>30</height>
      </rect>
@@ -183,8 +183,8 @@
    <widget class="QPushButton" name="nextSong">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>370</y>
+      <x>220</x>
+      <y>230</y>
       <width>88</width>
       <height>30</height>
      </rect>
