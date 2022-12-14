@@ -23,6 +23,7 @@ music_player::music_player(QWidget *parent)
 
     songsmodel = new QStringListModel(this);
     songDirectory = new QDir;
+    ptr_repeat = new bool;
 
 
 
@@ -33,7 +34,9 @@ music_player::music_player(QWidget *parent)
 
 
 
-    //====Lets populate the songlist with the songs====//
+    //===Image settings of buttons===//
+    ui->repeat->setIcon(QIcon(":/resources/images/black_circle.png"));
+    ui->repeat->setCheckable(true);
 
 
 
@@ -141,6 +144,13 @@ void music_player::on_start_clicked()
 void music_player::displaySongLength(int position){
 
     int song_progress = player->position();
+    qDebug() << "song_progress" << song_progress;
+    int song_dur = player->duration();
+    qDebug() << "song_dur" << song_dur;
+
+    QUrl song_source = player->source();
+
+
 
     //song progression Timer
     int song_remainder = song_progress % 60000;
@@ -152,6 +162,12 @@ void music_player::displaySongLength(int position){
         QString mins_progress_str = QString::number(mins_progress);
         QString running_song_progress = mins_progress_str + ":" + secs_progress_str;
         ui->label_4->setText(running_song_progress);
+
+        if((song_progress) == (song_dur) and *ptr_repeat == true){
+            qDebug() << "in the loop" ;
+
+
+        }
     }
     else{ //:run when >9 so we get :11, :12 and so on
         QString secs_progress_str = QString::number(secs_progress);
@@ -159,6 +175,12 @@ void music_player::displaySongLength(int position){
         QString mins_progress_str = QString::number(mins_progress);
         QString running_song_progress = mins_progress_str + ":" + secs_progress_str;
         ui->label_4->setText(running_song_progress);
+
+        if((song_progress) == (song_dur) and *ptr_repeat == true){
+            qDebug() << "in the loop" ;
+
+
+        }
     }
 
 }
@@ -262,11 +284,18 @@ void music_player::on_prevSong_clicked()
 
 
 
-
-
-
 void music_player::on_repeat_toggled(bool checked)
 {
+    *ptr_repeat = checked;
+    qDebug() << "ptr_repeat = " << *ptr_repeat;
 
+    if(checked) {
+        ui->repeat->setIcon(QIcon(":/resources/images/blue_circle.png"));
+        player->setLoops(-1);
+    }
+    else{
+        ui->repeat->setIcon(QIcon(":/resources/images/black_circle.png"));
+        player->setLoops(1);
+    }
 }
 

@@ -99,7 +99,10 @@ private slots:
     void on_prevSong_clicked();
 
 
-
+    /*!
+     * \brief on_repeat_toggled changes image icon of button based on toggle, black-no_repeat, blue-yes_repeat
+     * \param checked true or false toggle value
+     */
     void on_repeat_toggled(bool checked);
 
 private:
@@ -110,6 +113,7 @@ private:
 
     QStringListModel *songsmodel; //model that gets filled with stringlist of songs in a folder
     QDir* songDirectory; //folder directory that holds the songs
+    bool* ptr_repeat; //this will be a pointer to a bool of the toggle val of the repeat button.
 
 
 
