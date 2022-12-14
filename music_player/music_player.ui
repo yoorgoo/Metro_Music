@@ -193,6 +193,19 @@
      <string>Next &gt;&gt;</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="repeat">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>270</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

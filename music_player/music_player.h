@@ -86,9 +86,21 @@ private slots:
      */
     void on_nextSong_clicked();
 
+    /*!
+     * \brief on_songList_doubleClicked handles the double click on a song in the list view
+     * \param index index that gets double clicked in the list view
+     */
     void on_songList_doubleClicked(const QModelIndex &index);
 
+
+    /*!
+     * \brief on_prevSong_clicked go to the previous song
+     */
     void on_prevSong_clicked();
+
+
+
+    void on_repeat_toggled(bool checked);
 
 private:
     Ui::music_player *ui;
@@ -96,8 +108,8 @@ private:
     QMediaPlayer* player;
     QAudioOutput* audioOutput;
 
-    QStringListModel *songsmodel;
-    QDir* songDirectory;
+    QStringListModel *songsmodel; //model that gets filled with stringlist of songs in a folder
+    QDir* songDirectory; //folder directory that holds the songs
 
 
 
