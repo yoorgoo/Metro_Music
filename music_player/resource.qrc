@@ -2,5 +2,7 @@
     <qresource prefix="/resources">
         <file>images/black_circle.png</file>
         <file>images/blue_circle.png</file>
+        <file>images/black_cross_arrows.png</file>
+        <file>images/blue_cross_arrows.png</file>
     </qresource>
 </RCC>

@@ -105,6 +105,8 @@ private slots:
      */
     void on_repeat_toggled(bool checked);
 
+    void on_shuffle_b_toggled(bool checked);
+
 private:
     Ui::music_player *ui;
 
@@ -114,6 +116,7 @@ private:
     QStringListModel *songsmodel; //model that gets filled with stringlist of songs in a folder
     QDir* songDirectory; //folder directory that holds the songs
     bool* ptr_repeat; //this will be a pointer to a bool of the toggle val of the repeat button.
+    bool* ptr_shuffle; //this will be a pointer to a bool of the toggle val of the shuffle button.
 
 
 

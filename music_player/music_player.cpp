@@ -21,9 +21,11 @@ music_player::music_player(QWidget *parent)
     audioOutput = new QAudioOutput(this);
     player->setAudioOutput(audioOutput);
 
+
     songsmodel = new QStringListModel(this);
     songDirectory = new QDir;
     ptr_repeat = new bool;
+    ptr_shuffle = new bool;
 
 
 
@@ -38,6 +40,9 @@ music_player::music_player(QWidget *parent)
     ui->repeat->setIcon(QIcon(":/resources/images/black_circle.png"));
     ui->repeat->setCheckable(true);
 
+    ui->shuffle_b->setIcon(QIcon(":/resources/images/black_cross_arrows.png"));
+    ui->shuffle_b->setCheckable(true);
+
 
 
 
@@ -50,6 +55,12 @@ music_player::music_player(QWidget *parent)
 music_player::~music_player()
 {
     delete ui;
+    delete audioOutput;
+    delete songsmodel;
+    delete songDirectory;
+    delete ptr_repeat;
+    delete ptr_shuffle;
+
 }
 
 void music_player::on_progressSlider_sliderMoved(int position)
@@ -62,7 +73,7 @@ void music_player::on_progressSlider_sliderMoved(int position)
 void music_player::on_volumeSlider_sliderMoved(int position)
 { //this is a slot signal comes from slider moving
 
-    qreal linearVolume = QAudio::convertVolume(position / qreal(100.0),
+    qreal linearVolume = QAudio::convertVolume(position*1.3 / qreal(100.0),
                                                QAudio::LogarithmicVolumeScale,
                                                QAudio::LinearVolumeScale);
 
@@ -117,8 +128,13 @@ void music_player::on_durationChanged(int position)
 
 void music_player::on_start_clicked()
 {
-    //open a folder directory
-
+    /*
+     * We have a major bug that can kill the program.
+     * this occurs when we open a folder with music, play a song, and then open up another folder, and click next
+     * What happens is the previous song is still in the player class. The songlist model has changed and so when it looks for a next song it doesn't exist in the model
+     * To fix this we need to set the source of the player to NULL. Now when we update the model we won't have anything in the playe class.
+     *
+     */
 
     QString dirFolder = QFileDialog::getExistingDirectory(this, tr("Open Folder"),"C:/Users/buck_/Desktop/");
     QDir song_directory = dirFolder;
@@ -126,6 +142,14 @@ void music_player::on_start_clicked()
 
     QStringList songListView; //this gets pushed to the model
 
+
+    //What if we open multiple folders, or switch folders. Now things are broken.
+    //we need to clear the model of all the previous songs.
+    player->stop();
+    player->setSource(QUrl::fromLocalFile("NULL")); // This forces the player to not have audio. We need to click on a song. This is so we don't break things when switching folders
+
+
+    //open a folder directory
     foreach(QFileInfo var, song_directory.entryInfoList()){
         //we need to differntiate between .mp3 files and all others
         if(var.suffix() == "mp3"){ //get the suffix of the file
@@ -137,20 +161,12 @@ void music_player::on_start_clicked()
     //====This is were the model data is set====//
     songsmodel->setStringList(songListView);
     ui->songList->setModel(songsmodel);
-
     ui->songList->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void music_player::displaySongLength(int position){
 
     int song_progress = player->position();
-    qDebug() << "song_progress" << song_progress;
-    int song_dur = player->duration();
-    qDebug() << "song_dur" << song_dur;
-
-    QUrl song_source = player->source();
-
-
 
     //song progression Timer
     int song_remainder = song_progress % 60000;
@@ -163,11 +179,6 @@ void music_player::displaySongLength(int position){
         QString running_song_progress = mins_progress_str + ":" + secs_progress_str;
         ui->label_4->setText(running_song_progress);
 
-        if((song_progress) == (song_dur) and *ptr_repeat == true){
-            qDebug() << "in the loop" ;
-
-
-        }
     }
     else{ //:run when >9 so we get :11, :12 and so on
         QString secs_progress_str = QString::number(secs_progress);
@@ -176,11 +187,6 @@ void music_player::displaySongLength(int position){
         QString running_song_progress = mins_progress_str + ":" + secs_progress_str;
         ui->label_4->setText(running_song_progress);
 
-        if((song_progress) == (song_dur) and *ptr_repeat == true){
-            qDebug() << "in the loop" ;
-
-
-        }
     }
 
 }
@@ -194,33 +200,68 @@ void music_player::on_nextSong_clicked()
     //player->stop();
 
     if(player->hasAudio()){ //check for audio so we don't break things
-        int num_songs = songsmodel->stringList().size();
-        //int song_index = player->activeAudioTrack(); //why am I using the player class? we need to get it from the song mondel
-        QUrl curr_song = player->source(); //this includes the file path
-        qDebug() << "filename" << curr_song.fileName(); //this is just the filename
+        if(*ptr_shuffle == false)
+        {
+            int num_songs = songsmodel->stringList().size();
+            //int song_index = player->activeAudioTrack(); //why am I using the player class? we need to get it from the song mondel
+            QUrl curr_song = player->source(); //this includes the file path
+            qDebug() << "filename" << curr_song.fileName(); //this is just the filename
 
-        QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
-        qDebug() << "curr_song_str = " << curr_song_str;
+            QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
+            qDebug() << "curr_song_str = " << curr_song_str;
 
-        QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
-        qDebug() << "songDirectory_str = " << songDirectory_str;
+            QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
+            qDebug() << "songDirectory_str = " << songDirectory_str;
 
-        int song_index = songsmodel->stringList().indexOf(curr_song_str);
-        qDebug() << song_index;
-        int next_song_index = song_index + 1;
+            int song_index = songsmodel->stringList().indexOf(curr_song_str);
+            qDebug() << song_index;
+            int next_song_index = song_index + 1;
 
-        if(next_song_index > (num_songs-1)){
-            next_song_index = 0;
+            if(next_song_index > (num_songs-1)){
+                next_song_index = 0;
+            }
+
+            QString next_song_str = songsmodel->stringList().at(next_song_index);
+            qDebug() << next_song_str;
+
+            QString song_path = songDirectory_str +"/" +  next_song_str;
+            //QString song_path = songsmodel->stringList().value(next_song_index);
+
+            player->setSource(QUrl::fromLocalFile(song_path));
+            player->play();
         }
+        else
+        {
+            int num_songs = songsmodel->stringList().size();
+            int rand_num = rand() % (num_songs + 1);
+            //int song_index = player->activeAudioTrack(); //why am I using the player class? we need to get it from the song mondel
+            QUrl curr_song = player->source(); //this includes the file path
+            qDebug() << "filename" << curr_song.fileName(); //this is just the filename
 
-        QString next_song_str = songsmodel->stringList().at(next_song_index);
-        qDebug() << next_song_str;
+            QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
+            qDebug() << "curr_song_str = " << curr_song_str;
 
-        QString song_path = songDirectory_str +"/" +  next_song_str;
-        //QString song_path = songsmodel->stringList().value(next_song_index);
+            QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
+            qDebug() << "songDirectory_str = " << songDirectory_str;
 
-        player->setSource(QUrl::fromLocalFile(song_path));
-        player->play();
+            int song_index = songsmodel->stringList().indexOf(curr_song_str);
+            qDebug() << song_index;
+            int next_song_index = rand_num;
+
+            if(next_song_index > (num_songs-1)){
+                next_song_index = 0;
+            }
+
+            QString next_song_str = songsmodel->stringList().at(next_song_index);
+            qDebug() << next_song_str;
+
+            QString song_path = songDirectory_str +"/" +  next_song_str;
+            //QString song_path = songsmodel->stringList().value(next_song_index);
+
+            player->setSource(QUrl::fromLocalFile(song_path));
+            player->play();
+
+        }
     }
 
 
@@ -259,26 +300,66 @@ void music_player::on_prevSong_clicked()
      * */
 
     if(player->hasAudio()){
-        QUrl curr_song = player->source(); //this includes the file path
-        QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
-        QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
+        if(*ptr_shuffle == false)
+        {
+            QUrl curr_song = player->source(); //this includes the file path
+            QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
+            QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
 
-        int song_index = songsmodel->stringList().indexOf(curr_song_str); //get the index of the current song in the songsmodel
-        int prev_song_index = song_index -1; //set the index of the prev song
+            int song_index = songsmodel->stringList().indexOf(curr_song_str); //get the index of the current song in the songsmodel
+            int prev_song_index = song_index -1; //set the index of the prev song
 
-        if(prev_song_index < 0){
-            prev_song_index = 0; //do we want to go to end??? or just stay at 0?
+            if(prev_song_index < 0){
+                prev_song_index = 0; //do we want to go to end??? or just stay at 0?
+            }
+
+            QString prev_song_str = songsmodel->stringList().at(prev_song_index);
+
+            QString song_path = songDirectory_str + "/" +  prev_song_str;
+            //QString song_path = songsmodel->stringList().value(next_song_index);
+
+            player->setSource(QUrl::fromLocalFile(song_path));
+            player->play();
         }
 
-        QString prev_song_str = songsmodel->stringList().at(prev_song_index);
+        else
+        {
 
-        QString song_path = songDirectory_str + "/" +  prev_song_str;
-        //QString song_path = songsmodel->stringList().value(next_song_index);
+            int num_songs = songsmodel->stringList().size();
+            int rand_num = rand() % (num_songs + 1);
+            //int song_index = player->activeAudioTrack(); //why am I using the player class? we need to get it from the song mondel
+            QUrl curr_song = player->source(); //this includes the file path
+            qDebug() << "filename" << curr_song.fileName(); //this is just the filename
 
-        player->setSource(QUrl::fromLocalFile(song_path));
-        player->play();
+            QString curr_song_str = curr_song.fileName(); //this is just the file name. we can look for it in the songs model and then get the index.
+            qDebug() << "curr_song_str = " << curr_song_str;
+
+            QString songDirectory_str = songDirectory->absolutePath(); //just the directory path
+            qDebug() << "songDirectory_str = " << songDirectory_str;
+
+            int song_index = songsmodel->stringList().indexOf(curr_song_str);
+            qDebug() << song_index;
+            int next_song_index = rand_num;
+
+            if(next_song_index > (num_songs-1)){
+                next_song_index = 0;
+            }
+
+            QString next_song_str = songsmodel->stringList().at(next_song_index);
+            qDebug() << next_song_str;
+
+            QString song_path = songDirectory_str +"/" +  next_song_str;
+            //QString song_path = songsmodel->stringList().value(next_song_index);
+
+            player->setSource(QUrl::fromLocalFile(song_path));
+            player->play();
+
+
+        }
 
     }
+
+
 
 }
 
@@ -298,4 +379,22 @@ void music_player::on_repeat_toggled(bool checked)
         player->setLoops(1);
     }
 }
+
+
+
+
+void music_player::on_shuffle_b_toggled(bool checked)
+{
+    *ptr_shuffle = checked;
+
+    if(checked)
+    {
+        ui->shuffle_b->setIcon(QIcon(":/resources/images/blue_cross_arrows.png"));
+    }
+    else
+    {
+        ui->shuffle_b->setIcon(QIcon(":/resources/images/black_cross_arrows.png"));
+    }
+}
+
 

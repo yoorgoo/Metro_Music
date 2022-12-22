@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1048</width>
-    <height>503</height>
+    <height>502</height>
    </rect>
   </property>
   <property name="font">
@@ -147,8 +147,8 @@
    <widget class="QPushButton" name="start">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>10</y>
+      <x>90</x>
+      <y>20</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -172,7 +172,7 @@
      <rect>
       <x>90</x>
       <y>230</y>
-      <width>88</width>
+      <width>101</width>
       <height>30</height>
      </rect>
     </property>
@@ -183,9 +183,9 @@
    <widget class="QPushButton" name="nextSong">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>197</x>
       <y>230</y>
-      <width>88</width>
+      <width>111</width>
       <height>30</height>
      </rect>
     </property>
@@ -198,8 +198,8 @@
      <rect>
       <x>90</x>
       <y>270</y>
-      <width>42</width>
-      <height>42</height>
+      <width>41</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -207,9 +207,31 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>42</width>
-      <height>42</height>
+      <width>47</width>
+      <height>47</height>
      </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="shuffle_b">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>270</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>38</width>
+      <height>38</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
